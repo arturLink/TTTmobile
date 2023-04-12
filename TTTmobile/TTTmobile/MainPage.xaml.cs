@@ -10,10 +10,20 @@ namespace TTTmobile
 {
     public partial class MainPage : ContentPage
     {
-        string curCh = "X";
         Button btn, mangValik, buttons;
+
+        private string[,] board = new string[3, 3];
+        string curCh = "X";
         public MainPage()
         {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    board[i, j] = "-";
+                }
+            }
+
             Grid TripsTrapsTrull = new Grid
             {
                 ColumnSpacing = 3,
@@ -73,7 +83,8 @@ namespace TTTmobile
         {
             Button baton = (Button)sender;
 
-
+            int row = Grid.GetRow(baton);
+            int col = Grid.GetColumn(baton);
 
             if (curCh == "X")
             {
@@ -85,30 +96,45 @@ namespace TTTmobile
                 baton.Text = curCh;
                 curCh = "X";
             }
-            bool win = checkWinner();
+
             if (win == true)
             {
                 await DisplayAlert("Alert", "You have been alerted", "OK");
             }
 
         }
-        private bool checkWinner()
+        private string CheckWinner(string[,] board)
         {
-            // check rows
-            if (btn.TabIndex == 1 && btn.TabIndex == 2 && btn.TabIndex == 3) { return true; }
-            if (btn.TabIndex == 4 && btn.TabIndex == 5 && btn.TabIndex == 6) { return true; }
-            if (btn.TabIndex == 7 && btn.TabIndex == 8 && btn.TabIndex == 9) { return true; }
+            // Check rows
+            for (int i = 0; i < 3; i++)
+            {
+                if (board[i, 0] != "-" && board[i, 0] == board[i, 1] && board[i, 1] == board[i, 2])
+                {
+                    return board[i, 0];
+                }
+            }
 
-            // check columns
-            if (btn.TabIndex == 1 && btn.TabIndex == 4 && btn.TabIndex == 7) { return true; }
-            if (btn.TabIndex == 2 && btn.TabIndex == 5 && btn.TabIndex == 8) { return true; }
-            if (btn.TabIndex == 3 && btn.TabIndex == 6 && btn.TabIndex == 9) { return true; }
+            // Check columns
+            for (int i = 0; i < 3; i++)
+            {
+                if (board[0, i] != "-" && board[0, i] == board[1, i] && board[1, i] == board[2, i])
+                {
+                    return board[0, i];
+                }
+            }
 
-            // check diags
-            if (btn.TabIndex == 1 && btn.TabIndex == 5 && btn.TabIndex == 9) { return true; }
-            if (btn.TabIndex == 3 && btn.TabIndex == 5 && btn.TabIndex == 7) { return true; }
+            // Check diagonals
+            if (board[0, 0] != "-" && board[0, 0] == board[1, 1] && board[1, 1] == board[2, 2])
+            {
+                return board[0, 0];
+            }
+            if (board[0, 2] != "-" && board[0, 2] == board[1, 1] && board[1, 1] == board[2, 0])
+            {
+                return board[0, 2];
+            }
 
-            return false;
+            // No winner
+            return "-";
         }
     }
 }
