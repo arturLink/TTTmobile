@@ -68,9 +68,12 @@ namespace TTTmobile
             throw new NotImplementedException();
         }
         bool win = true;
+
         private async void Btn_Clicked(object sender, EventArgs e)
         {
             Button baton = (Button)sender;
+
+
 
             if (curCh == "X")
             {
@@ -87,6 +90,7 @@ namespace TTTmobile
             {
                 await DisplayAlert("Alert", "You have been alerted", "OK");
             }
+
         }
         private bool checkWinner()
         {
