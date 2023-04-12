@@ -10,8 +10,8 @@ namespace TTTmobile
 {
     public partial class MainPage : ContentPage
     {
-        char curCh = 'X';
-        Button btn, mangValik;
+        string curCh = "X";
+        Button btn, mangValik, buttons;
         public MainPage()
         {
             Grid TripsTrapsTrull = new Grid
@@ -67,11 +67,44 @@ namespace TTTmobile
         {
             throw new NotImplementedException();
         }
-
-        private void Btn_Clicked(object sender, EventArgs e)
+        bool win = true;
+        private async void Btn_Clicked(object sender, EventArgs e)
         {
             Button baton = (Button)sender;
-            
+
+            if (curCh == "X")
+            {
+                baton.Text = curCh;
+                curCh = "O";
+            }
+            else if (curCh == "O")
+            {
+                baton.Text = curCh;
+                curCh = "X";
+            }
+            bool win = checkWinner();
+            if (win == true)
+            {
+                await DisplayAlert("Alert", "You have been alerted", "OK");
+            }
+        }
+        private bool checkWinner()
+        {
+            // check rows
+            if (btn.TabIndex == 1 && btn.TabIndex == 2 && btn.TabIndex == 3) { return true; }
+            if (btn.TabIndex == 4 && btn.TabIndex == 5 && btn.TabIndex == 6) { return true; }
+            if (btn.TabIndex == 7 && btn.TabIndex == 8 && btn.TabIndex == 9) { return true; }
+
+            // check columns
+            if (btn.TabIndex == 1 && btn.TabIndex == 4 && btn.TabIndex == 7) { return true; }
+            if (btn.TabIndex == 2 && btn.TabIndex == 5 && btn.TabIndex == 8) { return true; }
+            if (btn.TabIndex == 3 && btn.TabIndex == 6 && btn.TabIndex == 9) { return true; }
+
+            // check diags
+            if (btn.TabIndex == 1 && btn.TabIndex == 5 && btn.TabIndex == 9) { return true; }
+            if (btn.TabIndex == 3 && btn.TabIndex == 5 && btn.TabIndex == 7) { return true; }
+
+            return false;
         }
     }
 }
