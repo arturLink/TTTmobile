@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -11,7 +12,8 @@ namespace TTTmobile
 {
     public partial class MainPage : ContentPage
     {
-        Button btn, mangValik, buttons;
+        Xamarin.Forms.Button btn, mangValik, buttons;
+        Grid TripsTrapsTrull;
 
         private string[,] board = new string[3, 3];
         string curCh = "X";
@@ -25,7 +27,7 @@ namespace TTTmobile
                 }
             }
 
-            Grid TripsTrapsTrull = new Grid
+            TripsTrapsTrull = new Grid
             {
                 ColumnSpacing = 3,
                 RowSpacing = 3,
@@ -49,7 +51,7 @@ namespace TTTmobile
             int b = 0;
             for (int i = 0; i < 9; i++)
             {
-                btn = new Button()
+                btn = new Xamarin.Forms.Button()
                 {
                     Text = "",
                     BackgroundColor = Color.Blue,
@@ -66,7 +68,7 @@ namespace TTTmobile
             }
             Content = TripsTrapsTrull;
 
-            mangValik = new Button()
+            mangValik = new Xamarin.Forms.Button()
             {
                 Text = "(X) või O",
                 BackgroundColor = Color.Gray,
@@ -78,42 +80,62 @@ namespace TTTmobile
         {
             throw new NotImplementedException();
         }
-        bool win = true;
 
         private async void Btn_Clicked(object sender, EventArgs e)
         {
-            Button baton = (Button)sender;
+            Xamarin.Forms.Button baton = (Xamarin.Forms.Button)sender;
 
             int row = Grid.GetRow(baton);
             int col = Grid.GetColumn(baton);
-
-            if (curCh == "X")
-            {
-                baton.Text = curCh;
-                curCh = "O";
-            }
-            else if (curCh == "O")
-            {
-                baton.Text = curCh;
-                curCh = "X";
-            }
 
             if (board[row, col] != "-")
             {
                 return;
             }
 
-            // Update the board and the button text
             board[row, col] = curCh;
             baton.Text = curCh;
 
-            // Check for a winner
             string winner = CheckWinner(board);
 
+            if (winner != "-")
+            {
+                // We have a winner!
+                await DisplayAlert("Winner", "Player " + winner + " wins!", "OK");
+                // Reset the game board
+                int rowRes = 0;
+                int colRes = 0;
+                for (int i = 0; i < 9; i++)
+                {
+                    Xamarin.Forms.Button button = GetButton(rowRes, colRes); // Get the button at the specified row and column
+                    button.Text = ""; // Clear the text of the button
+                    button.IsEnabled = true; // Enable the button
+                    button.Clicked += Btn_Clicked;
+                    rowRes++;
+                    if (rowRes == 3)
+                    {
+                        colRes++;
+                        rowRes = 0;
+                    }
+                }
+            }
+            else
+            {
+                // Switch players
+                if (curCh == "X")
+                {
+                    curCh = "O";
+                }
+                else if (curCh == "O")
+                {
+                    curCh = "X";
+                }
+                //curCh = curCh == "X" ? "O" : "X";
+            }
         }
         private string CheckWinner(string[,] board)
         {
-            // Check rows
+            //row
             for (int i = 0; i < 3; i++)
             {
                 if (board[i, 0] != "-" && board[i, 0] == board[i, 1] && board[i, 1] == board[i, 2])
@@ -122,7 +144,7 @@ namespace TTTmobile
                 }
             }
 
-            // Check columns
+            //col
             for (int i = 0; i < 3; i++)
             {
                 if (board[0, i] != "-" && board[0, i] == board[1, i] && board[1, i] == board[2, i])
@@ -131,7 +153,7 @@ namespace TTTmobile
                 }
             }
 
-            // Check diagonals
+            //diag
             if (board[0, 0] != "-" && board[0, 0] == board[1, 1] && board[1, 1] == board[2, 2])
             {
                 return board[0, 0];
@@ -141,8 +163,20 @@ namespace TTTmobile
                 return board[0, 2];
             }
 
-            // No winner
+            //draw
             return "-";
+        }
+
+        private Xamarin.Forms.Button GetButton(int row, int col)
+        {
+            foreach (var child in TripsTrapsTrull.Children)
+            {
+                if (Grid.GetRow(child) == row && Grid.GetColumn(child) == col && child is Xamarin.Forms.Button button)
+                {
+                    return button;
+                }
+            }
+            return null;
         }
     }
 }
