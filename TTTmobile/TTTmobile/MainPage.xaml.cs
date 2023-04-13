@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 
 namespace TTTmobile
 {
@@ -97,10 +98,17 @@ namespace TTTmobile
                 curCh = "X";
             }
 
-            if (win == true)
+            if (board[row, col] != "-")
             {
-                await DisplayAlert("Alert", "You have been alerted", "OK");
+                return;
             }
+
+            // Update the board and the button text
+            board[row, col] = curCh;
+            baton.Text = curCh;
+
+            // Check for a winner
+            string winner = CheckWinner(board);
 
         }
         private string CheckWinner(string[,] board)
