@@ -110,7 +110,7 @@ namespace TTTmobile
                     Xamarin.Forms.Button button = GetButton(rowRes, colRes); // Get the button at the specified row and column
                     button.Text = ""; // Clear the text of the button
                     button.IsEnabled = true; // Enable the button
-                    button.Clicked += Btn_Clicked;
+                    //button.Clicked += Btn_Clicked;
                     rowRes++;
                     if (rowRes == 3)
                     {
