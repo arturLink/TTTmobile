@@ -98,26 +98,41 @@ namespace TTTmobile
 
             string winner = CheckWinner(board);
 
+
             if (winner != "-")
             {
                 // We have a winner!
                 await DisplayAlert("Winner", "Player " + winner + " wins!", "OK");
-                // Reset the game board
-                int rowRes = 0;
-                int colRes = 0;
-                for (int i = 0; i < 9; i++)
-                {
-                    Xamarin.Forms.Button button = GetButton(rowRes, colRes); // Get the button at the specified row and column
-                    button.Text = ""; // Clear the text of the button
-                    button.IsEnabled = true; // Enable the button
-                    //button.Clicked += Btn_Clicked;
-                    rowRes++;
-                    if (rowRes == 3)
-                    {
-                        colRes++;
-                        rowRes = 0;
-                    }
-                }
+
+                //for (int rowC = 0; rowC < 3; rowC++)
+                //{
+                //    for (int column = 0; column < 3; column++)
+                //    {
+                //        board[row, column] = " ";
+                //        Xamarin.Forms.Button button = (Xamarin.Forms.Button)board.Children
+                //            .First(b => Grid.GetRow(b) == row && Grid.GetColumn(b) == column);
+                //        button.Text = "";
+                //        button.IsEnabled = true;
+                //    }
+                //}
+
+
+                //// Reset the game board
+                //int rowRes = 0;
+                //int colRes = 0;
+                //for (int i = 0; i < 9; i++)
+                //{
+                //    Xamarin.Forms.Button button = GetButton(rowRes, colRes); // Get the button at the specified row and column
+                //    button.Text = ""; // Clear the text of the button
+                //    button.IsEnabled = true; // Enable the button
+                //    //button.Clicked += Btn_Clicked;
+                //    rowRes++;
+                //    if (rowRes == 3)
+                //    {
+                //        colRes++;
+                //        rowRes = 0;
+                //    }
+                //}
             }
             else
             {
